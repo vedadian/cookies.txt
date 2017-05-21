@@ -30,15 +30,21 @@ chrome.tabs.getSelected(null, function(tab) {
     downloadable += "# Example:  wget -x --load-cookies cookies.txt " + escapeForPre(tab.url) + "\n"; 
     downloadable += "#\n"; 
 
-    var uri = "data:application/octet-stream;base64,"+btoa(downloadable + content);
-    var a = '<a href='+ uri +' download="cookies.txt">downloaded</a>';
+    var blob = new Blob([downloadable + content], { type: "text/plain" });
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var uri = e.target.result;
+      var a = '<a href='+ uri +' download="cookies.txt">downloaded</a>';
 
-    popup += "# HTTP Cookie File for domains related to <b>" + escapeForPre(domain) + "</b>.\n";
-    popup += "# This content may be "+ a +" or pasted into a cookies.txt file and used by wget\n";
-    popup += "# Example:  wget -x <b>--load-cookies cookies.txt</b> " + escapeForPre(tab.url) + "\n"; 
-    popup += "#\n";
+      popup += "# HTTP Cookie File for domains related to <b>" + escapeForPre(domain) + "</b>.\n";
+      popup += "# This content may be "+ a +" or pasted into a cookies.txt file and used by wget\n";
+      popup += "# Example:  wget -x <b>--load-cookies cookies.txt</b> " + escapeForPre(tab.url) + "\n"; 
+      popup += "#\n";
 
-    document.write("<pre>\n"+ popup + content + "</pre>");
+      document.write("<pre>\n"+ popup + content + "</pre>");
+    };
+    reader.readAsDataURL(blob);
+
   });      
 })
 
