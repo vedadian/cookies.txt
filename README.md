@@ -1,3 +1,8 @@
+# Changes
+Updated to change computation of base 64 strings more robust.
+
+# Original README.md
+
 Allows users to export their session cookie data from Chrome to a legacy
 Netscape/Mozilla file format so wget (and other tools) can use it. This
 allows wget to continue a possibly authenticated session that was
